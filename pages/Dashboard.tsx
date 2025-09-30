@@ -1,13 +1,25 @@
 // FIX: Created the Dashboard component.
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Card } from '../components/common/Card';
 import { useSettings } from '../contexts/SettingsContext';
 import { ComplianceDocumentStatus } from '../types';
+import { Toast } from '../components/common/Toast';
 
 const Dashboard = () => {
     const { currentUser } = useAuth();
     const { settings } = useSettings();
+    const location = useLocation();
+    const [toast, setToast] = useState<{ message: string; type: 'info' | 'error' | 'success' }>({ message: '', type: 'info' });
+    
+    useEffect(() => {
+        if (location.state?.message) {
+            setToast({ message: location.state.message, type: location.state.type || 'info' });
+            // Clear the state from history so the message doesn't reappear on refresh
+            window.history.replaceState({}, document.title)
+        }
+    }, [location.state]);
     
     const overdueDocs = settings.compliance.documents.filter(d => d.status === ComplianceDocumentStatus.OVERDUE);
     const dueSoonDocs = settings.compliance.documents.filter(d => d.status === ComplianceDocumentStatus.DUE_SOON);
@@ -21,6 +33,7 @@ const Dashboard = () => {
 
     return (
         <div>
+            {toast.message && <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'info' })} />}
             <h1 className="text-2xl font-bold mb-4">Welcome, {currentUser?.name}!</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 

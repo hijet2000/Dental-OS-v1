@@ -15,6 +15,7 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    setError(''); // Clear error on new input
     const value = e.target.value;
     if (/^[0-9]$/.test(value) || value === '') {
       const newPin = [...pin];
