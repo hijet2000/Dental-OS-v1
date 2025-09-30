@@ -1,0 +1,5 @@
+{
+  "name": "Dental OS v1",
+  "description": "An operations-only Dental OS settings foundation. This application provides a comprehensive settings area to manage tenants, plans, modules, locations, roles, permissions, and more, serving as the single source of truth for the system.",
+  "requestFramePermissions": []
+}
